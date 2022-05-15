@@ -1,0 +1,79 @@
+{% extends 'base.html' %} {%block table %} {% if not session['api_key'] %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12 text-center">
+      <p>Fetch Data Error</p>
+    </div>
+  </div>
+</div>
+{% else %}
+<!-- LIST TABLE -->
+<section class="table-wrapper">
+  <div class="container-fluid">
+    <!--CONTROL AREA-->
+    <div class="control-wrapper">
+      <div class="row">
+        <div class="col-12 text-end">
+          <input
+            id="searchInput"
+            type="text"
+            class="btn btn-outline-secondary btn-search"
+            placeholder="&#128270;"
+          />
+          <div class="dropdown">
+            <button class="dropbtn btn btn-outline-secondary">View</button>
+            <div class="dropdown-content">
+              <a href="#">10 records</a>
+              <a href="#">100 records</a>
+              <a href="#">500 records</a>
+              <a href="#">All records</a>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="btnRefresh">&#8635;</button>
+        </div>
+      </div>
+    </div>
+    <!--CONTROL AREA-->
+    <div class="table-responsive">
+      <table class="table-custom">
+        <thead>
+          <th>List Id</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Subscribe</th>
+          <th>Unsubscriber</th>
+        </thead>
+        <tbody>
+          {% for list in response.lists %}
+
+          <tr>
+            <th>
+              <a href="{{url_for('core.members', list_id=list.id)}}"
+                >{{ list.id }}</a
+              >
+            </th>
+            <td>{{ list.name }}</td>
+            <td>{{ list.campaign_defaults.from_email }}</td>
+            <td>{{ list.stats.member_count }}</td>
+            <td>{{ list.stats.unsubscribe_count }}</td>
+          </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!--CONTROL AREA-->
+    <div class="control-wrapper">
+      <div class="row">
+        <div class="col-12 text-end">
+          <button type="button" class="btn btn-primary">&#43;</button>
+          <button type="button" class="btn btn-danger">&#8722;</button>
+        </div>
+      </div>
+    </div>
+    <!--CONTROL AREA-->
+  </div>
+</section>
+
+{% endif %} {% endblock table %}

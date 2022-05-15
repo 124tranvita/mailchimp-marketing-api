@@ -1,0 +1,195 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none !important;
+  color: #000 !important;
+}
+
+.navbar-wrapper {
+  padding: 1rem 0;
+  /* max-height: 150px; */
+  box-shadow: 0 2px 2px hsl(38deg 16% 76% / 50%);
+  width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+  .navbar-wrapper {
+    max-height: 150px;
+  }
+}
+
+.navbar-wrapper ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.navbar-wrapper ul > li {
+  padding: 0.5rem 1.5rem;
+  font-weight: 600;
+  font-size: 120%;
+}
+
+@media screen and (min-width: 768px) {
+  .navbar-wrapper ul > li {
+    display: inline-block;
+  }
+}
+
+.navbar-wrapper ul > li:hover {
+  border-bottom: 2px solid #04aa6d;
+  color: #04aa6d;
+  cursor: pointer;
+}
+
+@media screen and(max-width: 425px) {
+  .navbar-wrapper ul > li:hover {
+    /* border-bottom: 2px solid #04aa6d; */
+    cursor: pointer;
+  }
+}
+
+.logo:hover {
+  border: none !important;
+}
+
+/* Style The Dropdown Button */
+.dropbtn {
+  border: none;
+  cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  margin: auto;
+  background-color: #f9f9f9;
+  min-width: 250px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.table-wrapper {
+  margin-top: 2rem;
+  margin-bottom: 5rem;
+}
+
+.table > thead {
+  background-color: #f2f2f2;
+}
+
+.table > tbody {
+  height: 200px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.table > tbody > tr:hover {
+  cursor: pointer;
+}
+
+.table-responsive {
+  max-height: calc(100vh - 250px);
+  margin-bottom: 1rem;
+}
+
+.table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: #f2f2f2;
+}
+
+.control-wrapper {
+  margin-bottom: 0.5rem;
+}
+
+.input-search {
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.card {
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.2);
+}
+
+.btn-search {
+  text-align: start !important;
+}
+
+.btn-search:hover {
+  background-color: rgba(0, 0, 0, 0) !important;
+  color: #000 !important;
+  cursor: text !important;
+}
+
+.table-custom {
+  width: 100%;
+  overflow: auto;
+  border: 1px solid #f2f2f2;
+}
+
+.table-custom > thead {
+  background-color: #f2f2f2;
+  border-bottom: 1px solid #000;
+}
+
+.table-custom > thead > tr,
+.table-custom > tbody > tr {
+  height: 2rem;
+}
+
+.table-custom > tbody tr:hover {
+  background-color: #f2f2f2;
+}
+
+.table-custom td,
+.table-custom th {
+  padding: 0 0.5rem;
+}
+
+#toastMsg {
+  background-color: #fff;
+}

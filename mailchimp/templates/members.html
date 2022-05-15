@@ -1,0 +1,703 @@
+{% extends 'base.html' %} {%block table %} {% if status_code != 200 %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12 text-center">
+      <h1>{{status_code}}</h1>
+      <p>Fetch Data Error</p>
+    </div>
+  </div>
+</div>
+{% else %}
+<!-- LIST TABLE -->
+<section class="table-wrapper">
+  <div class="container-fluid">
+    <!--TOAST-->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 9999">
+      <div
+        id="toastMsg"
+        class="toast"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <div class="toast-header">
+          <strong class="me-auto">Message</strong>
+          <small class="text-muted">just now</small>
+          <button
+            type="button"
+            class="btn-close"
+            id="closeToast"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="toast-body" id="responseMsg">See? Just like this.</div>
+      </div>
+    </div>
+    <!--TOAST-->
+
+    <!-- ADD MEM MODAL-->
+    <div class="modal fade" tabindex="-1" id="addMemModal" name="addMemModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addMemModalLabel">Add list's member</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="emailNew" class="form-label">Email address</label>
+              <input
+                type="email"
+                class="form-control"
+                id="emailNew"
+                placeholder="name@example.com"
+              />
+              <span class="text-danger" id="emailNewError"></span>
+            </div>
+            <div class="mb-3">
+              <label for="statusNew" class="form-label">Status</label>
+              <select
+                id="statusNew"
+                class="form-select"
+                aria-label="Default select example"
+              >
+                <option value="subscribed">Subscribed</option>
+                <option value="unsubscribed">Unsubscribed</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+              name="addMemModal"
+              onclick="closeModal(this)"
+            >
+              Close
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              onclick="submitNewMember()"
+            >
+              Add
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--ADD MEM MODAL-->
+
+    <!-- MEMBER INFO MODAL-->
+    <div class="modal fade" tabindex="-1" id="memInfoModal" name="memInfoModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Member Infomation</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <form action="" id="updateForm">
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-12">
+                  <label for="contactId" class="form-label">Contact Id</label>
+                  <input
+                    type="text"
+                    id="contactId"
+                    class="form-control"
+                    disabled
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-8">
+                  <label for="emailInfo" class="form-label"
+                    >Email Address</label
+                  >
+                  <input
+                    type="email"
+                    id="emailInfo"
+                    class="form-control"
+                    name="emailInfo"
+                  />
+                  <span class="text-danger" id="emailInfoError"></span>
+                </div>
+                <div class="col-12 col-sm-4">
+                  <label for="statusInfo" class="form-label">Status</label>
+                  <select
+                    id="statusInfo"
+                    class="form-select"
+                    aria-label="Default select example"
+                  >
+                    <option value="subscribed">Subscribed</option>
+                    <option value="unsubscribed">Unsubscribed</option>
+                    <option value="cleaned">Cleaned</option>
+                    <option value="pending">Pending</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-6">
+                  <label for="firstNameInfo" class="form-label"
+                    >First Name</label
+                  >
+                  <input
+                    type="text"
+                    id="firstNameInfo"
+                    class="form-control"
+                    name="firstNameInfo"
+                  />
+                  <span class="text-danger" id="firstNameInfoError"></span>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label for="lastNameInfo" class="form-label">Last Name</label>
+                  <input
+                    type="text"
+                    id="lastNameInfo"
+                    class="form-control"
+                    name="lastNameInfo"
+                  />
+                  <span class="text-danger" id="lastNameInfoError"></span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-8">
+                  <label for="addressInfo" class="form-label">Address</label>
+                  <input
+                    type="text"
+                    id="addressInfo"
+                    class="form-control"
+                    name="addressInfo"
+                  />
+                  <span class="text-danger" id="addressInfoError"></span>
+                </div>
+                <div class="col-12 col-sm-4">
+                  <label for="stateInfo" class="form-label">State</label>
+                  <input
+                    type="text"
+                    id="stateInfo"
+                    class="form-control"
+                    name="stateInfo"
+                  />
+                  <span class="text-danger" id="stateInfoError"></span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-4">
+                  <label for="cityInfo" class="form-label">City</label>
+                  <input
+                    type="text"
+                    id="cityInfo"
+                    class="form-control"
+                    name="cityInfo"
+                  />
+                  <span class="text-danger" id="cityInfoError"></span>
+                </div>
+                <div class="col-12 col-sm-4">
+                  <label for="zipInfo" class="form-label">Zip Code</label>
+                  <input
+                    type="number"
+                    id="zipInfo"
+                    class="form-control"
+                    name="zipInfo"
+                  />
+                  <span class="text-danger" id="zipInfoError"></span>
+                </div>
+                <div class="col-12 col-sm-4">
+                  <label for="countryInfo" class="form-label">Country</label>
+                  <input
+                    type="text"
+                    id="countryInfo"
+                    class="form-control"
+                    name="countryInfo"
+                  />
+                  <span class="text-danger" id="countryInfoError"></span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-6">
+                  <label for="phoneInfo" class="form-label">Phone</label>
+                  <input type="number" id="phoneInfo" class="form-control" />
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label for="birthdayInfo" class="form-label">Birthday</label>
+                  <input type="date" id="birthdayInfo" class="form-control" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-6">
+                  <label for="emailTypeInfo" class="form-label"
+                    >Receive Email Type</label
+                  >
+                  <select
+                    id="emailTypeInfo"
+                    class="form-select"
+                    aria-label="Default select example"
+                  >
+                    <option value="html">HTML</option>
+                    <option value="text">TEXT</option>
+                  </select>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label for="languageInfo" class="form-label">Language</label>
+                  <select
+                    id="languageInfo"
+                    class="form-select"
+                    aria-label="Default select example"
+                  >
+                    <option value="" selected>Not selected</option>
+                    <option value="en">English</option>
+                    <option value="de">German</option>
+                    <option value="ja">Japanese</option>
+                    <option value="ru">Russian</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 mt-1">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value="1"
+                    id="vipInfo"
+                  />
+                  <label class="form-check-label" for="vipInfo">
+                    VIP Subscriber?
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-danger"
+                data-bs-dismiss="modal"
+                name="memInfoModal"
+                onclick="archiveMember(this)"
+              >
+                Archive
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                name="memInfoModal"
+                onclick="closeModal(this)"
+              >
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary">
+                Save changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- MEMBER INFO MODAL-->
+
+    <!-- SUBSCRIBE INFO MODAL-->
+    <div
+      class="modal fade"
+      tabindex="-1"
+      id="subscribeModal"
+      name="subscribeModal"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Subscriber's Infomation</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <form action="" id="subscribeForm">
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-12 col-sm-8">
+                  <label for="emailSub" class="form-label">Email Address</label>
+                  <input
+                    type="email"
+                    id="emailSub"
+                    class="form-control"
+                    name="emailSub"
+                  />
+                  <span class="text-danger" id="emailSubError"></span>
+                </div>
+                <div class="col-12 col-sm-4">
+                  <label for="statusSub" class="form-label">Status</label>
+                  <select
+                    id="statusSub"
+                    class="form-select"
+                    aria-label="Default select example"
+                  >
+                    <option value="subscribed">Subscribed</option>
+                    <option value="unsubscribed">Unsubscribed</option>
+                    <option value="cleaned">Cleaned</option>
+                    <option value="pending">Pending</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-6">
+                  <label for="firstNameSub" class="form-label"
+                    >First Name</label
+                  >
+                  <input
+                    type="text"
+                    id="firstNameSub"
+                    class="form-control"
+                    name="firstNameSub"
+                  />
+                  <span class="text-danger" id="firstNameSubError"></span>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label for="lastNameSub" class="form-label">Last Name</label>
+                  <input
+                    type="text"
+                    id="lastNameSub"
+                    class="form-control"
+                    name="lastNameSub"
+                  />
+                  <span class="text-danger" id="lastNameSubError"></span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-8">
+                  <label for="addressSub" class="form-label">Address</label>
+                  <input
+                    type="text"
+                    id="addressSub"
+                    class="form-control"
+                    name="addressSub"
+                  />
+                  <span class="text-danger" id="addressSubError"></span>
+                </div>
+                <div class="col-12 col-sm-4">
+                  <label for="stateSub" class="form-label">State</label>
+                  <input
+                    type="text"
+                    id="stateSub"
+                    class="form-control"
+                    name="stateSub"
+                  />
+                  <span class="text-danger" id="stateSubError"></span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-4">
+                  <label for="citySub" class="form-label">City</label>
+                  <input
+                    type="text"
+                    id="citySub"
+                    class="form-control"
+                    name="citySub"
+                  />
+                  <span class="text-danger" id="citySubError"></span>
+                </div>
+                <div class="col-12 col-sm-4">
+                  <label for="zipSub" class="form-label">Zip Code</label>
+                  <input
+                    type="number"
+                    id="zipSub"
+                    class="form-control"
+                    name="zipSub"
+                  />
+                  <span class="text-danger" id="zipSubError"></span>
+                </div>
+                <div class="col-12 col-sm-4">
+                  <label for="countrySub" class="form-label">Country</label>
+                  <input
+                    type="text"
+                    id="countrySub"
+                    class="form-control"
+                    name="countrySub"
+                  />
+                  <span class="text-danger" id="countrySubError"></span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-6">
+                  <label for="phoneSub" class="form-label">Phone</label>
+                  <input type="number" id="phoneSub" class="form-control" />
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label for="birthdaySub" class="form-label">Birthday</label>
+                  <input type="date" id="birthdaySub" class="form-control" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-6">
+                  <label for="emailTypeSub" class="form-label"
+                    >Receive Email Type</label
+                  >
+                  <select
+                    id="emailTypeSub"
+                    class="form-select"
+                    aria-label="Default select example"
+                  >
+                    <option value="html">HTML</option>
+                    <option value="text">TEXT</option>
+                  </select>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label for="languageSub" class="form-label">Language</label>
+                  <select
+                    id="languageSub"
+                    class="form-select"
+                    aria-label="Default select example"
+                  >
+                    <option value="" selected>Not selected</option>
+                    <option value="en">English</option>
+                    <option value="de">German</option>
+                    <option value="ja">Japanese</option>
+                    <option value="ru">Russian</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 mt-1">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value="1"
+                    id="vipSub"
+                  />
+                  <label class="form-check-label" for="vipSub">
+                    VIP Subscriber?
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                name="subscribeModal"
+                onclick="closeModal(this)"
+              >
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary">Subscribe</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- SUBSCRIBE INFO MODAL-->
+
+    <!-- BATCH SUB MODAL-->
+    <div
+      class="modal fade"
+      tabindex="-1"
+      id="batchSubModal"
+      name="batchSubModal"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Batch Subscribe</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="formFile" class="form-label"
+                >Select list of members (in JSON format)</label
+              >
+              <input class="form-control" type="file" id="formFile" />
+              <span class="text-danger" id="formFileError"></span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+              name="batchSubModal"
+              onclick="closeModal(this)"
+            >
+              Close
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              onclick="submitFile()"
+            >
+              Add
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--BATCH SUB MODAL-->
+
+    <!--CONTROL AREA-->
+    <div class="control-wrapper">
+      <div class="row">
+        <div class="col-12 col-sm-2 mb-3 mb-sm-0">
+          <div class="input-group">
+            <span class="input-group-text" id="sessionListId">List ID</span>
+            <input
+              type="text"
+              class="form-control"
+              value="{{list_id}}"
+              id="listId"
+              readonly
+              style="background-color: #fff"
+            />
+          </div>
+        </div>
+        <div class="col-12 col-sm-10 text-end">
+          <input
+            id="searchInput"
+            type="text"
+            class="btn btn-outline-secondary btn-search"
+            placeholder="&#128270;"
+            onkeyup="tableSearch()"
+          />
+          <div class="dropdown">
+            <button
+              class="dropbtn btn btn-outline-secondary"
+              data-bs-tooltip="tooltip"
+              title="Records per page"
+            >
+              View
+            </button>
+            <div class="dropdown-content">
+              <a href="{{ url_for('core.view',list_id=list_id, count=10) }}"
+                >10 records</a
+              >
+              <a href="{{ url_for('core.view',list_id=list_id, count=100) }}"
+                >100 records</a
+              >
+              <a href="{{ url_for('core.view',list_id=list_id, count=500) }}"
+                >500 records</a
+              >
+              <a href="{{ url_for('core.view',list_id=list_id, count=1000) }}"
+                >All records</a
+              >
+            </div>
+          </div>
+          <button
+            class="btn btn-primary"
+            id="btnRefresh"
+            data-bs-tooltip="tooltip"
+            title="Refresh page"
+          >
+            &#8635;
+          </button>
+        </div>
+      </div>
+    </div>
+    <!--CONTROL AREA-->
+
+    <!--TABLE-->
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <th>Email Address</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Address</th>
+          <th>Phone Number</th>
+          <th>Email Marketing</th>
+          <th>Source</th>
+          <th>Date Added</th>
+        </thead>
+        {% if status_code != 200 %}
+        <p>Fetch Data Error. Status code: {{status_code}}</p>
+        {% else %}
+        <tbody id="tbody">
+          {% for member in response.members %}
+          <tr
+            data="{{member}}"
+            data-bs-toggle="modal"
+            data-bs-target="#memInfoModal"
+            onclick="addValidateOnOpenUpdateModal()"
+          >
+            <td scope="col">{{member.email_address}}</td>
+            <td>{{member.merge_fields.FNAME}}</td>
+            <td>{{member.merge_fields.LNAME}}</td>
+            <td>{{member.merge_fields.ADDRESS.country}}</td>
+            <td>{{member.merge_fields.PHONE}}</td>
+            {% if member.status == 'subscribed'%}
+            <td><span class="badge bg-success">{{member.status}}</span></td>
+            {% else %}
+            <td>
+              <span class="badge bg-secondary">{{member.status}}</span>
+            </td>
+            {% endif %}
+            <td>{{member.source}}</td>
+            <td>{{member.timestamp_opt[:10]}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        {% endif %}
+      </table>
+    </div>
+    <!--TABLE-->
+
+    <!--CONTROL AREA-->
+    <div class="control-wrapper">
+      <div class="row">
+        <div class="col-12 text-end">
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-tooltip="tooltip"
+            title="Add member"
+            data-bs-target="#addMemModal"
+          >
+            &#43;
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-tooltip="tooltip"
+            title="Subscribe member"
+            data-bs-target="#subscribeModal"
+            onclick="addValidateOnOpenSubscribeModal()"
+          >
+            &#128276;
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-tooltip="tooltip"
+            title="Batch subscribe members"
+            data-bs-target="#batchSubModal"
+          >
+            &#128194;
+          </button>
+        </div>
+      </div>
+    </div>
+    <!--CONTROL AREA-->
+  </div>
+</section>
+<script src="{{ url_for('static', filename='member.js') }}"></script>
+{% endif %} {% endblock table %}

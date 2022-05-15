@@ -1,0 +1,86 @@
+{% extends 'base.html' %} {%block table %}
+<div class="container-fluid">
+  <div class="row mt-5">
+    <div class="col-3"></div>
+    <div class="col-6">
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="sessionURL">URL</span>
+        <input
+          type="text"
+          class="form-control"
+          value="{{session['url']}}"
+          aria-label="Username"
+          aria-describedby="sessionURL"
+          readonly
+        />
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="sessionUsername">Username</span>
+        <input
+          type="text"
+          class="form-control"
+          value="{{username}}"
+          aria-label="Username"
+          aria-describedby="sessionUsername"
+          readonly
+        />
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="sessionApiKey">API Key</span>
+        <input
+          type="text"
+          class="form-control"
+          value="{{session['api_key']}}"
+          aria-label="Username"
+          aria-describedby="sessionApiKey"
+          readonly
+        />
+      </div>
+    </div>
+    <div class="col-3"></div>
+    <div class="col-12 text-center">
+      <button
+        class="btn btn-danger"
+        data-bs-toggle="modal"
+        data-bs-target="#confirmModal"
+      >
+        End Session
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="confirmModal"
+  tabindex="-1"
+  aria-labelledby="confirmModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmModalLabel">Logout?</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-danger">
+          <a href="{{ url_for('core.logout') }}" style="color: #fff !important">
+            End Session
+          </a>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock table %}
